@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Estoque - Terceirizadas</title>
+  <link rel="stylesheet" href="Css/style.css">
+</head>
+
+<body>
+
+  <!-- 1. BANNER DE TOPO SEPARADO -->
+  <header class="banner-topo-global">
+    <div class="banner-conteudo">
+      <h1>Controle de Estoque</h1>
+      <p>Gerenciamento inteligente, rápido e profissional para a sua empresa.</p>
+    </div>
+  </header>
+
+  <!-- CONTAINER PRINCIPAL DO CONTEÚDO -->
+  <div class="container-principal">
+
+    <!-- 2. PAINEL  SEPARADO -->
+    <div class="painel-separado">
+      <!-- Card 1: Cadastrar -->
+      <div class="card-opcao" onclick="alternarSecao('secao-cadastro')">
+        <span class="icone-card">➕</span>
+        <h3>Cadastrar Produto</h3>
+        <p>Adicionar novos itens ao inventário</p>
+      </div>
+
+      <!--Estoque -->
+      <div class="card-opcao" onclick="alternarSecao('secao-estoque')">
+        <span class="icone-card">📦</span>
+        <h3>Verificar Estoque</h3>
+        <p>Consultar lista, preços de produtos e excluir produtos</p>
+      </div>
+
+      <!--Entradas e Saídas -->
+      <div class="card-opcao" onclick="alternarSecao('secao-movimentacoes')">
+        <span class="icone-card">🔄</span>
+        <h3>Entradas e Saídas</h3>
+        <p>Histórico e movimentações de itens</p>
+      </div>
+    </div>
+
+    <!-- 3. SEÇÕES RETRÁTEIS -->
+
+    <!-- SEÇÃO 1: FORMULÁRIO DE CADASTRO -->
+    <div id="secao-cadastro" class="secao-painel" style="display: none;">
+      <h2>Cadastrar Novo Produto</h2>
+      <form id="form-produto">
+        <div class="input-group">
+          <label for="prod-codigo">Código do Produto *</label>
+          <input type="text" id="prod-codigo" required placeholder="Ex: P001">
+        </div>
+        <div class="input-group">
+          <label for="prod-nome">Nome do Produto *</label>
+          <input type="text" id="prod-nome" required placeholder="Ex: Caderno Universitário">
+        </div>
+        <div class="input-group">
+          <label for="prod-categoria">Categoria</label>
+          <input type="text" id="prod-categoria" placeholder="Ex: Papelaria">
+        </div>
+        <div class="input-group">
+          <label for="prod-quantidade">Quantidade Inicial</label>
+          <input type="number" id="prod-quantidade" min="0" value="0">
+        </div>
+        <div class="input-group">
+          <label for="prod-preco">Preço (R$)</label>
+          <input type="number" id="prod-preco" step="0.01" min="0" value="0.00">
+        </div>
+        <div class="input-group">
+          <label for="prod-estoque-min">Estoque Mínimo (Alerta)</label>
+          <input type="number" id="prod-estoque-min" min="0" value="0">
+        </div>
+        <button type="submit" id="btn-salvar" class="btn-principal">Salvar Produto</button>
+      </form>
+    </div>
+
+    <!-- VERIFICAR ESTOQUE -->
+    <div id="secao-estoque" class="secao-painel" style="display: none;">
+      <div class="topo-tabela">
+        <h2>Lista de Produtos em Estoque</h2>
+        <input type="text" id="input-busca" placeholder="Pesquisar por nome...">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nome do Produto</th>
+            <th>Categoria</th>
+            <th>Quantidade</th>
+            <th>Preço (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-estoque">
+          <tr>
+            <td>P001</td>
+            <td>Caderno Universitário</td>
+            <td>Papelaria</td>
+            <td>15</td>
+            <td>R$ 25,00</td>
+            <td>
+              <button class="btn-editar">Editar</button>
+              <button class="btn-excluir">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ENTRADAS E SAÍDAS -->
+    <div id="secao-movimentacoes" class="secao-painel" style="display: none;">
+      <h2>Histórico de Entradas e Saídas</h2>
+      <p class="subtexto-secao">Registro padrão de movimentações de estoque com controle de datas.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Data / Hora</th>
+            <th>Tipo</th>
+            <th>Produto</th>
+            <th>Quantidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>24/10/2026 - 14:30</td>
+            <td><span class="texto-entrada">Entrada</span></td>
+            <td>Caderno Universitário</td>
+            <td>+20 un.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+
+</html>

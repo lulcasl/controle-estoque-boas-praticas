@@ -1,0 +1,231 @@
+/* RESET GLOBAL E CONFIGURAÇÕES BÁSICAS*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7fa; 
+    color: #333;
+    min-height: 100vh;
+    padding-bottom: 50px;
+}
+
+/* 1. BANNER DE TOPO*/
+.banner-topo-global {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.banner-conteudo {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.banner-conteudo h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+}
+
+.banner-conteudo p {
+    font-size: 1.15rem;
+    color: #94a3b8; 
+    font-weight: 400;
+}
+
+/* 2. CONTAINER PRINCIPAL E PAINEL SEPARADOS*/
+.container-principal {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Painel que separa os três cards */
+.painel-cards-separado {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Estilo individual de cada card grande */
+.card-opcao {
+    flex: 1;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.card-opcao:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+    border-color: #3b82f6; /* Borda azul viva ao passar o mouse */
+}
+
+.icone-card {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.card-opcao h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.card-opcao p {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* 3. SEÇÕES DE CONTEÚDO RETRÁTEIS*/
+.secao-painel {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+}
+
+.secao-painel h2 {
+    color: #1e293b;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    border-left: 5px solid #3b82f6;
+    padding-left: 12px;
+}
+
+.subtexto-secao {
+    color: #64748b;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+/* 4. FORMULÁRIOS E INPUTS*/
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #475569;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.btn-principal {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-principal:hover {
+    background-color: #059669;
+}
+
+/*5. TABELAS DE DADOS*/
+.topo-tabela {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.topo-tabela input {
+    padding: 10px;
+    width: 280px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background-color: #f8fafc;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.btn-editar {
+    background-color: #f59e0b;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.btn-excluir {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.btn-editar:hover { background-color: #d97706; }
+.btn-excluir:hover { background-color: #dc2626; }
+
+.texto-entrada {
+    color: #10b981;
+    font-weight: bold;
+}
