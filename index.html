@@ -14,7 +14,7 @@
   <header class="banner-topo-global">
     <div class="banner-conteudo">
       <h1>Controle de Estoque</h1>
-      <p>Gerenciamento inteligente, rápido e profissional para a sua empresa.</p>
+      <p>Cadastro e consulta de produtos</p>
     </div>
   </header>
 
@@ -22,89 +22,103 @@
   <div class="container-principal">
 
     <!-- 2. PAINEL  SEPARADO -->
-    <div class="painel-cards-separado">
+    <nav class="painel-cards-separado">
       <!-- Card 1: Cadastrar -->
       <a href="#secao-cadastro" class="card-opcao">
         <span class="icone-card">➕</span>
-        <h3>Cadastrar Produto</h3>
-        <p>Adicionar novos itens ao inventário</p>
+        <div>
+          <h3>Cadastrar produto</h3>
+          <p>Adicionar um novo item</p>
+        </div>
       </a>
 
       <!--Estoque -->
       <a href="#secao-estoque" class="card-opcao">
         <span class="icone-card">📦</span>
-        <h3>Verificar Estoque</h3>
-        <p>Consultar lista, preços de produtos e excluir produtos</p>
+        <div>
+          <h3>Verificar estoque</h3>
+          <p>Consultar, editar e excluir</p>
+        </div>
       </a>
 
       <!--Entradas e Saídas -->
       <div class="card-opcao" onclick="alternarSecao('secao-movimentacoes')">
         <span class="icone-card">🔄</span>
-        <h3>Entradas e Saídas</h3>
-        <p>Histórico e movimentações de itens</p>
+        <div>
+          <h3>Entradas e saídas</h3>
+          <p>Registrar movimentações</p>
+        </div>
       </div>
-    </div>
+    </nav>
 
     <!-- 3. SEÇÕES RETRÁTEIS -->
 
     <!-- SEÇÃO 1: FORMULÁRIO DE CADASTRO -->
-    <div id="secao-cadastro" class="secao-painel">
-      <h2>Cadastrar Novo Produto</h2>
+    <section id="secao-cadastro" class="secao-painel">
+      <h2>Cadastrar produto</h2>
+      <p class="aviso-obrigatorio">Campos com <span class="obrigatorio">*</span> são obrigatórios.</p>
       <form id="form-produto">
         <div class="input-group">
-          <label for="prod-codigo">Código do Produto *</label>
-          <input type="text" id="prod-codigo" required placeholder="Ex: P001">
+          <label for="prod-codigo">Código <span class="obrigatorio">*</span></label>
+          <input type="text" id="prod-codigo" required placeholder="P001">
+          <p class="dica-campo">Não pode se repetir</p>
         </div>
-        <div class="input-group">
-          <label for="prod-nome">Nome do Produto *</label>
-          <input type="text" id="prod-nome" required placeholder="Ex: Caderno Universitário">
+        <div class="input-group campo-largo">
+          <label for="prod-nome">Nome do produto <span class="obrigatorio">*</span></label>
+          <input type="text" id="prod-nome" required placeholder="Caderno universitário">
         </div>
         <div class="input-group">
           <label for="prod-categoria">Categoria</label>
-          <input type="text" id="prod-categoria" placeholder="Ex: Papelaria">
+          <input type="text" id="prod-categoria" placeholder="Papelaria">
         </div>
         <div class="input-group">
-          <label for="prod-quantidade">Quantidade Inicial</label>
+          <label for="prod-quantidade">Quantidade inicial</label>
           <input type="number" id="prod-quantidade" min="0" step="1" value="0">
+        </div>
+        <div class="input-group">
+          <label for="prod-estoque-min">Estoque mínimo</label>
+          <input type="number" id="prod-estoque-min" min="0" step="1" value="0">
         </div>
         <div class="input-group">
           <label for="prod-preco">Preço (R$)</label>
           <input type="number" id="prod-preco" step="0.01" min="0" value="0.00">
         </div>
-        <div class="input-group">
-          <label for="prod-estoque-min">Estoque Mínimo (Alerta)</label>
-          <input type="number" id="prod-estoque-min" min="0" step="1" value="0">
+        <div class="botoes-formulario">
+          <button type="reset" class="btn-secundario">Limpar</button>
+          <button type="submit" id="btn-salvar" class="btn-principal">Salvar produto</button>
         </div>
-        <button type="submit" id="btn-salvar" class="btn-principal">Salvar Produto</button>
       </form>
-    </div>
+    </section>
 
     <!-- VERIFICAR ESTOQUE -->
-    <div id="secao-estoque" class="secao-painel">
+    <section id="secao-estoque" class="secao-painel">
       <div class="topo-tabela">
-        <h2>Lista de Produtos em Estoque</h2>
-        <input type="text" id="input-busca" placeholder="Pesquisar por nome...">
+        <h2>Produtos em estoque</h2>
+        <div class="busca">
+          <span class="icone-busca">🔍</span>
+          <input type="text" id="input-busca" placeholder="Pesquisar por nome">
+        </div>
       </div>
       <table>
         <thead>
           <tr>
             <th>Código</th>
-            <th>Nome do Produto</th>
+            <th>Nome</th>
             <th>Categoria</th>
             <th class="coluna-numero">Quantidade</th>
+            <th class="coluna-numero">Estoque mín.</th>
             <th class="coluna-numero">Preço (R$)</th>
-            <th class="coluna-numero">Estoque Mín.</th>
             <th class="coluna-acoes">Ações</th>
           </tr>
         </thead>
         <tbody id="tabela-estoque">
           <tr>
             <td>P001</td>
-            <td>Caderno Universitário</td>
+            <td>Caderno universitário</td>
             <td>Papelaria</td>
             <td class="coluna-numero">15</td>
-            <td class="coluna-numero">R$ 25,00</td>
             <td class="coluna-numero">5</td>
+            <td class="coluna-numero">25,00</td>
             <td class="coluna-acoes">
               <button class="btn-editar">Editar</button>
               <button class="btn-excluir">Excluir</button>
@@ -113,7 +127,7 @@
         </tbody>
       </table>
       <p id="total-produtos" class="rodape-tabela"></p>
-    </div>
+    </section>
 
     <!-- ENTRADAS E SAÍDAS -->
     <div id="secao-movimentacoes" class="secao-painel" style="display: none;">
