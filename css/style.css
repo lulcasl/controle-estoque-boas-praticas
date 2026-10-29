@@ -70,7 +70,8 @@ body {
 }
 
 .container-principal:has(#secao-cadastro:target) a[href="#secao-cadastro"],
-.container-principal:has(#secao-estoque:target) a[href="#secao-estoque"] {
+.container-principal:has(#secao-estoque:target) a[href="#secao-estoque"],
+.container-principal:has(#secao-movimentacoes:target) a[href="#secao-movimentacoes"] {
     border: 2px solid #2563eb;
     background-color: #eff6ff;
 }
@@ -103,6 +104,15 @@ body {
     display: block;
 }
 
+.container-principal:has(#secao-movimentacoes:target) .secao-historico-movimentacoes,
+.container-principal:has(#secao-estoque:target) .secao-historico-alteracoes {
+    display: block;
+}
+
+.secao-painel table {
+    margin-top: 16px;
+}
+
 .secao-painel h2 {
     font-size: 1.2rem;
     font-weight: 600;
@@ -116,7 +126,8 @@ body {
 }
 
 /* 4. FORMULÁRIOS E INPUTS*/
-#form-produto {
+#form-produto,
+#form-movimentacao {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px 20px;
@@ -145,7 +156,8 @@ body {
     margin-top: 4px;
 }
 
-input {
+input,
+select {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid #cbd5e1;
@@ -154,7 +166,12 @@ input {
     color: #1e293b;
 }
 
-input:focus {
+select {
+    background-color: #ffffff;
+}
+
+input:focus,
+select:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
@@ -291,7 +308,15 @@ tbody tr:hover {
     color: #64748b;
 }
 
+.texto-entrada,
+.texto-saida {
+    font-weight: 600;
+}
+
 .texto-entrada {
-    color: #10b981;
-    font-weight: bold;
+    color: #059669;
+}
+
+.texto-saida {
+    color: #dc2626;
 }

@@ -42,13 +42,13 @@
       </a>
 
       <!--Entradas e Saídas -->
-      <div class="card-opcao" onclick="alternarSecao('secao-movimentacoes')">
+      <a href="#secao-movimentacoes" class="card-opcao">
         <span class="icone-card">🔄</span>
         <div>
           <h3>Entradas e saídas</h3>
           <p>Registrar movimentações</p>
         </div>
-      </div>
+      </a>
     </nav>
 
     <!-- 3. SEÇÕES RETRÁTEIS -->
@@ -129,29 +129,70 @@
       <p id="total-produtos" class="rodape-tabela"></p>
     </section>
 
-    <!-- ENTRADAS E SAÍDAS -->
-    <div id="secao-movimentacoes" class="secao-painel" style="display: none;">
-      <h2>Histórico de Entradas e Saídas</h2>
-      <p class="subtexto-secao">Registro padrão de movimentações de estoque com controle de datas.</p>
+    <section class="secao-painel secao-historico-alteracoes">
+      <h2>Histórico de alterações</h2>
+      <p class="subtexto-secao">Produtos editados, do mais recente para o mais antigo.</p>
       <table>
         <thead>
           <tr>
-            <th>Data / Hora</th>
-            <th>Tipo</th>
-            <th>Produto</th>
-            <th>Quantidade</th>
+            <th>Data / hora</th>
+            <th>Código</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tabela-alteracoes">
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ENTRADAS E SAÍDAS -->
+    <section id="secao-movimentacoes" class="secao-painel">
+      <h2>Registrar movimentação</h2>
+      <p class="aviso-obrigatorio">Campos com <span class="obrigatorio">*</span> são obrigatórios.</p>
+      <form id="form-movimentacao">
+        <div class="input-group">
+          <label for="trans-prod-codigo">Código do produto <span class="obrigatorio">*</span></label>
+          <input type="text" id="trans-prod-codigo" required placeholder="P001">
+        </div>
+        <div class="input-group">
+          <label for="trans-tipo">Tipo <span class="obrigatorio">*</span></label>
+          <select id="trans-tipo" required>
+            <option value="ENTRADA">Entrada</option>
+            <option value="SAÍDA">Saída</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="trans-quantidade">Quantidade</label>
+          <input type="number" id="trans-quantidade" min="0" step="1" value="0">
+        </div>
+        <div class="botoes-formulario">
+          <button type="reset" class="btn-secundario">Limpar</button>
+          <button type="submit" id="btn-registrar" class="btn-principal">Registrar movimentação</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="secao-painel secao-historico-movimentacoes">
+      <h2>Histórico de movimentações</h2>
+      <p class="subtexto-secao">Entradas e saídas de produtos, da mais recente para a mais antiga.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Data / hora</th>
+            <th>Código</th>
+            <th>Tipo</th>
+            <th class="coluna-numero">Quantidade</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-movimentacoes">
           <tr>
             <td>24/10/2026 - 14:30</td>
+            <td>P001</td>
             <td><span class="texto-entrada">Entrada</span></td>
-            <td>Caderno Universitário</td>
-            <td>+20 un.</td>
+            <td class="coluna-numero">20</td>
           </tr>
         </tbody>
       </table>
-    </div>
+    </section>
 
   </div>
 </body>
