@@ -83,6 +83,7 @@
           <label for="prod-preco">Preço (R$)</label>
           <input type="number" id="prod-preco" step="0.01" min="0" value="0.00">
         </div>
+        <p id="mensagem-produto" class="mensagem-erro"></p>
         <div class="botoes-formulario">
           <button type="reset" class="btn-secundario">Limpar</button>
           <button type="submit" id="btn-salvar" class="btn-principal">Salvar produto</button>
@@ -146,12 +147,15 @@
           <select id="trans-tipo" required>
             <option value="ENTRADA">Entrada</option>
             <option value="SAÍDA">Saída</option>
+            <option value="AJUSTE">Ajuste</option>
           </select>
         </div>
         <div class="input-group">
           <label for="trans-quantidade">Quantidade</label>
-          <input type="number" id="trans-quantidade" min="1" step="1" value="1">
+          <input type="number" id="trans-quantidade" min="0" step="1" value="1">
+          <p class="dica-campo">No ajuste, informe o novo saldo final</p>
         </div>
+        <p id="mensagem-movimentacao" class="mensagem-erro"></p>
         <div class="botoes-formulario">
           <button type="reset" class="btn-secundario">Limpar</button>
           <button type="submit" id="btn-registrar" class="btn-principal">Registrar movimentação</button>
@@ -160,15 +164,25 @@
     </section>
 
     <section class="secao-painel secao-historico-movimentacoes">
-      <h2>Histórico de movimentações</h2>
-      <p class="subtexto-secao">Entradas e saídas de produtos, da mais recente para a mais antiga.</p>
+      <div class="topo-tabela">
+        <div>
+          <h2>Histórico de movimentações</h2>
+          <p class="subtexto-secao">Entradas, saídas e ajustes, da mais recente para a mais antiga.</p>
+        </div>
+        <div class="busca">
+          <span class="icone-busca">🔍</span>
+          <input type="text" id="filtro-historico-codigo" placeholder="Filtrar por código">
+        </div>
+      </div>
       <table>
         <thead>
           <tr>
             <th>Data / hora</th>
             <th>Código</th>
             <th>Tipo</th>
-            <th class="coluna-numero">Quantidade</th>
+            <th class="coluna-numero">Quantidade / diferença</th>
+            <th class="coluna-numero">Saldo anterior</th>
+            <th class="coluna-numero">Saldo posterior</th>
           </tr>
         </thead>
         <tbody id="tabela-movimentacoes">

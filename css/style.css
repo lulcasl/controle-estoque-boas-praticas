@@ -170,11 +170,28 @@ select {
     background-color: #ffffff;
 }
 
+input:disabled {
+    background-color: #f1f5f9;
+    color: #64748b;
+    cursor: not-allowed;
+}
+
 input:focus,
 select:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.mensagem-erro {
+    grid-column: 1 / -1;
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.mensagem-erro:empty {
+    display: none;
 }
 
 .botoes-formulario {
@@ -315,7 +332,8 @@ tbody tr:hover {
 }
 
 .texto-entrada,
-.texto-saida {
+.texto-saida,
+.texto-ajuste {
     font-weight: 600;
 }
 
@@ -325,4 +343,8 @@ tbody tr:hover {
 
 .texto-saida {
     color: #dc2626;
+}
+
+.texto-ajuste {
+    color: #2563eb;
 }
