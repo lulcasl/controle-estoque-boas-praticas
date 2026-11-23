@@ -49,6 +49,14 @@ const campoBusca = document.getElementById("input-busca");
 const totalProdutos = document.getElementById("total-produtos");
 
 const botaoSalvar = document.getElementById("btn-salvar");
+const filtroHistorico = document.getElementById("filtro-historico-codigo");
+
+function mostrarMensagem(id, texto, erro = true) {
+    const campo = document.getElementById(id);
+    campo.textContent = texto;
+    campo.className = "mensagem-formulario " + (erro ? "erro" : "sucesso");
+}
+
 
 // Evita que dados digitados sejam interpretados como HTML.
 function escaparHTML(valor) {
@@ -84,7 +92,7 @@ function cadastrarProduto(novoProduto) {
     );
 
     if (codigoExiste) {
-        alert("Erro: este código já está cadastrado!");
+        mostrarMensagem("mensagem-produto", "Erro: este código já está cadastrado!");
         return false;
     }
 
@@ -222,11 +230,13 @@ function editarProduto(codigo) {
     );
 
     if (!produtoEncontrado) {
-        alert("Produto não encontrado!");
+        mostrarMensagem("mensagem-produto", "Produto não encontrado!");
         return;
     }
 
     codigoEmEdicao = codigo;
+
+    window.location.hash = "secao-cadastro";
 
     document.getElementById("prod-codigo").value = produtoEncontrado.codigo;
     document.getElementById("prod-nome").value = produtoEncontrado.nome;
@@ -236,6 +246,7 @@ function editarProduto(codigo) {
     document.getElementById("prod-preco").value = produtoEncontrado.preco;
 
     document.getElementById("prod-codigo").disabled = true;
+    document.getElementById("prod-quantidade").disabled = true;
 
     botaoSalvar.textContent = "Salvar alterações";
 
@@ -251,7 +262,7 @@ function atualizarProduto(codigo, novosDados) {
     );
 
     if (indice === -1) {
-        alert("Produto não encontrado!");
+        mostrarMensagem("mensagem-produto", "Produto não encontrado!");
         return false;
     }
 
@@ -259,7 +270,7 @@ function atualizarProduto(codigo, novosDados) {
         ...produtos[indice],
         nome: novosDados.nome,
         categoria: novosDados.categoria,
-        quantidade: novosDados.quantidade,
+        // O saldo só muda pelo formulário de movimentação.
         estoqueMinimo: novosDados.estoqueMinimo,
         preco: novosDados.preco
     };
@@ -283,6 +294,12 @@ function excluirProduto(codigo) {
 
     if (indice === -1) {
         alert("Produto não encontrado!");
+        return;
+    }
+
+    if (movimentacoes.some(movimentacao => movimentacao.codigo === codigo)) {
+        mostrarMensagem("mensagem-produto", "Este produto possui movimentações e não pode ser excluído.");
+        window.location.hash = "secao-cadastro";
         return;
     }
 
@@ -333,7 +350,7 @@ formularioProduto.addEventListener("submit", function (evento) {
     
 
     if (!codigo || !nome) {
-        alert("Preencha o código e o nome do produto!");
+        mostrarMensagem("mensagem-produto", "Preencha o código e o nome do produto!");
         return;
     }
 
@@ -343,12 +360,12 @@ formularioProduto.addEventListener("submit", function (evento) {
         !Number.isInteger(estoqueMinimo) ||
         estoqueMinimo < 0
     ) {
-        alert("Quantidade e estoque mínimo devem ser números inteiros positivos!");
+        mostrarMensagem("mensagem-produto", "Quantidade e estoque mínimo devem ser números inteiros não negativos!");
         return;
     }
 
     if (!Number.isFinite(preco) || preco < 0) {
-        alert("Informe um preço válido!");
+        mostrarMensagem("mensagem-produto", "Informe um preço válido!");
         return;
     }
 
@@ -379,6 +396,8 @@ formularioProduto.addEventListener("submit", function (evento) {
         codigoEmEdicao = null;
 
         document.getElementById("prod-codigo").disabled = false;
+        document.getElementById("prod-quantidade").disabled = false;
+        mostrarMensagem("mensagem-produto", "Produto salvo com sucesso!", false);
 
         botaoSalvar.textContent = "Salvar produto";
 
@@ -412,57 +431,84 @@ tabelaEstoque.addEventListener("click", function (evento) {
 
 function movimentarEstoque(codigo, tipo, quantidade) {
 
-    const produto = produtos.find(
-        produto => produto.codigo === codigo
-    );
+    const produto = produtos.find(produto => produto.codigo === codigo);
 
     if (!produto) {
-        alert("Produto não encontrado!");
+        mostrarMensagem("mensagem-movimentacao", "Produto não encontrado!");
         return false;
     }
 
-    if (
-        tipo !== "ENTRADA" &&
-        tipo !== "SAÍDA"
-    ) {
-        alert("Tipo de movimentação inválido!");
+    if (!["ENTRADA", "SAÍDA", "AJUSTE"].includes(tipo)) {
+        mostrarMensagem("mensagem-movimentacao", "Tipo de movimentação inválido!");
         return false;
     }
 
-    if (!Number.isInteger(quantidade) || quantidade <= 0) {
-        alert("Informe uma quantidade inteira maior que zero!");
+    if (!Number.isInteger(quantidade) || quantidade < 0 ||
+        (tipo !== "AJUSTE" && quantidade === 0)) {
+        mostrarMensagem("mensagem-movimentacao", tipo === "AJUSTE"
+            ? "Informe um novo saldo inteiro maior ou igual a zero!"
+            : "Informe uma quantidade inteira maior que zero!");
         return false;
     }
 
-    if (tipo === "SAÍDA" && quantidade > produto.quantidade) {
-        alert("Erro: estoque insuficiente para realizar a saída!");
+    const saldoAnterior = produto.quantidade;
+
+    if (tipo === "SAÍDA" && quantidade > saldoAnterior) {
+        mostrarMensagem("mensagem-movimentacao", "Erro: estoque insuficiente para realizar a saída!");
         return false;
     }
 
+    let saldoPosterior;
     if (tipo === "ENTRADA") {
-        produto.quantidade += quantidade;
+        saldoPosterior = saldoAnterior + quantidade;
+    } else if (tipo === "SAÍDA") {
+        saldoPosterior = saldoAnterior - quantidade;
     } else {
-        produto.quantidade -= quantidade;
+        saldoPosterior = quantidade; // No ajuste, o número digitado é o saldo final.
     }
 
-    salvarProdutos();
-
-    movimentacoes.unshift({
+    const registro = {
         data: obterDataHora(),
         codigo: produto.codigo,
         tipo: tipo,
-        quantidade: quantidade
-    });
+        quantidade: tipo === "AJUSTE" ? saldoPosterior - saldoAnterior : quantidade,
+        saldoAnterior: saldoAnterior,
+        saldoPosterior: saldoPosterior
+    };
 
-    salvarMovimentacoes();
+    // Guarda a situação anterior caso a gravação no navegador falhe.
+    const produtosAnteriores = localStorage.getItem("produtos");
+    const movimentacoesAnteriores = localStorage.getItem("movimentacoes");
+
+    try {
+        const novosProdutos = produtos.map(item => item.codigo === codigo
+            ? { ...item, quantidade: saldoPosterior } : item);
+        const novasMovimentacoes = [registro, ...movimentacoes];
+
+        localStorage.setItem("produtos", JSON.stringify(novosProdutos));
+        localStorage.setItem("movimentacoes", JSON.stringify(novasMovimentacoes));
+
+        produto.quantidade = saldoPosterior;
+        movimentacoes.unshift(registro);
+    } catch (erro) {
+        // Restaura os dois registros, sem alterar os dados em memória.
+        try {
+            if (produtosAnteriores === null) localStorage.removeItem("produtos");
+            else localStorage.setItem("produtos", produtosAnteriores);
+            if (movimentacoesAnteriores === null) localStorage.removeItem("movimentacoes");
+            else localStorage.setItem("movimentacoes", movimentacoesAnteriores);
+        } catch (erroRestauracao) {
+            console.error("Não foi possível restaurar o armazenamento:", erroRestauracao);
+        }
+        console.error("Erro ao salvar movimentação:", erro);
+        mostrarMensagem("mensagem-movimentacao", "Não foi possível salvar a movimentação. Tente novamente.");
+        return false;
+    }
 
     listarProdutos();
     listarMovimentacoes();
-
+    mostrarMensagem("mensagem-movimentacao", "Movimentação registrada com sucesso!", false);
     console.log("Movimentação registrada:", produto.nome);
-
-    alert("Movimentação registrada com sucesso!");
-
     return true;
 }
 
@@ -479,9 +525,8 @@ formularioMovimentacao.addEventListener("submit", function (evento) {
 
     const tipo = document.getElementById("trans-tipo").value;
 
-    const quantidade = Number(
-        document.getElementById("trans-quantidade").value
-    );
+    const valorDigitado = document.getElementById("trans-quantidade").value;
+    const quantidade = valorDigitado.trim() === "" ? NaN : Number(valorDigitado);
 
     const sucesso = movimentarEstoque(
         codigo,
@@ -500,54 +545,67 @@ function listarMovimentacoes() {
 
     tabelaMovimentacoes.innerHTML = "";
 
-    if (movimentacoes.length === 0) {
+    const codigoFiltrado = filtroHistorico.value.trim().toUpperCase();
+    const lista = movimentacoes.filter(movimentacao =>
+        movimentacao.codigo.toUpperCase().includes(codigoFiltrado)
+    );
+
+    if (lista.length === 0) {
         tabelaMovimentacoes.innerHTML = `
-            <tr>
-                <td colspan="4">Nenhuma movimentação registrada.</td>
-            </tr>
+            <tr><td colspan="6">Nenhuma movimentação encontrada.</td></tr>
         `;
         return;
     }
 
-    movimentacoes.forEach(movimentacao => {
-
+    lista.forEach(movimentacao => {
         const linha = document.createElement("tr");
+        const classe = movimentacao.tipo === "ENTRADA" ? "texto-entrada"
+            : movimentacao.tipo === "AJUSTE" ? "texto-ajuste" : "texto-saida";
+        const tipoExibido = movimentacao.tipo === "ENTRADA" ? "Entrada"
+            : movimentacao.tipo === "AJUSTE" ? "Ajuste" : "Saída";
 
-        const classe =
-            movimentacao.tipo === "ENTRADA"
-                ? "texto-entrada"
-                : "texto-saida";
-
-        const tipoExibido =
-            movimentacao.tipo === "ENTRADA"
-                ? "Entrada"
-                : "Saída";
+        // Registros antigos não tinham os saldos; não inventar esses valores.
+        const anterior = movimentacao.saldoAnterior ?? "-";
+        const posterior = movimentacao.saldoPosterior ?? "-";
 
         linha.innerHTML = `
             <td>${escaparHTML(movimentacao.data)}</td>
-
             <td>${escaparHTML(movimentacao.codigo)}</td>
-
-            <td>
-                <span class="${classe}">${tipoExibido}</span>
-            </td>
-
-            <td class="coluna-numero">
-                ${movimentacao.quantidade}
-            </td>
+            <td><span class="${classe}">${tipoExibido}</span></td>
+            <td class="coluna-numero">${escaparHTML(movimentacao.quantidade)}</td>
+            <td class="coluna-numero">${escaparHTML(anterior)}</td>
+            <td class="coluna-numero">${escaparHTML(posterior)}</td>
         `;
-
         tabelaMovimentacoes.appendChild(linha);
     });
 }
 
+filtroHistorico.addEventListener("input", listarMovimentacoes);
 
+const campoTipo = document.getElementById("trans-tipo");
+const campoQuantidade = document.getElementById("trans-quantidade");
+
+campoTipo.addEventListener("change", function () {
+    const ajuste = this.value === "AJUSTE";
+    document.getElementById("label-trans-quantidade").textContent =
+        ajuste ? "Novo saldo final" : "Quantidade";
+    campoQuantidade.min = ajuste ? "0" : "1";
+    campoQuantidade.value = ajuste ? "0" : "1";
+});
+
+formularioMovimentacao.addEventListener("reset", function () {
+    // O navegador restaura o tipo após o evento reset.
+    document.getElementById("label-trans-quantidade").textContent = "Quantidade";
+    campoQuantidade.min = "1";
+});
 
 formularioProduto.addEventListener("reset", function () {
 
     codigoEmEdicao = null;
 
     document.getElementById("prod-codigo").disabled = false;
+    document.getElementById("prod-quantidade").disabled = false;
+    document.getElementById("mensagem-produto").textContent = "";
 
     botaoSalvar.textContent = "Salvar produto";
 });

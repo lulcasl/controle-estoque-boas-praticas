@@ -83,7 +83,7 @@
           <label for="prod-preco">Preço (R$)</label>
           <input type="number" id="prod-preco" step="0.01" min="0" value="0.00">
         </div>
-        <p id="mensagem-produto" class="mensagem-erro"></p>
+        <p id="mensagem-produto" class="mensagem-formulario" aria-live="polite"></p>
         <div class="botoes-formulario">
           <button type="reset" class="btn-secundario">Limpar</button>
           <button type="submit" id="btn-salvar" class="btn-principal">Salvar produto</button>
@@ -151,11 +151,11 @@
           </select>
         </div>
         <div class="input-group">
-          <label for="trans-quantidade">Quantidade</label>
+          <label for="trans-quantidade" id="label-trans-quantidade">Quantidade</label>
           <input type="number" id="trans-quantidade" min="0" step="1" value="1">
           <p class="dica-campo">No ajuste, informe o novo saldo final</p>
         </div>
-        <p id="mensagem-movimentacao" class="mensagem-erro"></p>
+        <p id="mensagem-movimentacao" class="mensagem-formulario" aria-live="polite"></p>
         <div class="botoes-formulario">
           <button type="reset" class="btn-secundario">Limpar</button>
           <button type="submit" id="btn-registrar" class="btn-principal">Registrar movimentação</button>

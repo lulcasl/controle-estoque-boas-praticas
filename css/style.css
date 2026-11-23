@@ -183,14 +183,18 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
-.mensagem-erro {
+.mensagem-formulario {
     grid-column: 1 / -1;
     color: #dc2626;
     font-size: 0.85rem;
     font-weight: 600;
 }
 
-.mensagem-erro:empty {
+.mensagem-formulario.sucesso {
+    color: #059669;
+}
+
+.mensagem-formulario:empty {
     display: none;
 }
 
