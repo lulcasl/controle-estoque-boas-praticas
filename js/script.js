@@ -121,6 +121,7 @@ function listarProdutos(lista = produtos) {
     lista.forEach(produto => {
 
         const estoqueBaixo =
+            produto.estoqueMinimo > 0 &&
             produto.quantidade <= produto.estoqueMinimo;
 
         const linha = document.createElement("tr");
@@ -133,8 +134,8 @@ function listarProdutos(lista = produtos) {
             <td>${escaparHTML(produto.categoria || "-")}</td>
 
             <td class="coluna-numero">
+                ${estoqueBaixo ? '<span class="estoque-baixo">(Baixo) </span>' : ""}
                 ${produto.quantidade}
-                ${estoqueBaixo ? '<span class="estoque-baixo"> (Baixo)</span>' : ""}
             </td>
 
             <td class="coluna-numero">${produto.estoqueMinimo}</td>
@@ -293,13 +294,12 @@ function excluirProduto(codigo) {
     );
 
     if (indice === -1) {
-        alert("Produto não encontrado!");
+        mostrarMensagem("mensagem-estoque", "Produto não encontrado!");
         return;
     }
 
     if (movimentacoes.some(movimentacao => movimentacao.codigo === codigo)) {
-        mostrarMensagem("mensagem-produto", "Este produto possui movimentações e não pode ser excluído.");
-        window.location.hash = "secao-cadastro";
+        mostrarMensagem("mensagem-estoque", "Este produto possui movimentações e não pode ser excluído.");
         return;
     }
 
@@ -318,6 +318,8 @@ function excluirProduto(codigo) {
     salvarProdutos();
 
     listarProdutos();
+
+    mostrarMensagem("mensagem-estoque", "Produto excluído com sucesso!", false);
 
     console.log("Produto excluído:", nomeExcluido);
 }
@@ -468,6 +470,7 @@ function movimentarEstoque(codigo, tipo, quantidade) {
     }
 
     const registro = {
+        id: Date.now(),
         data: obterDataHora(),
         codigo: produto.codigo,
         tipo: tipo,
